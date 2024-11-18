@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".levels.Level0">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,29 +23,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.4"
-            android:orientation="vertical"/>
+            android:layout_weight="0.75"
+            android:orientation="vertical"></LinearLayout>
 
         <Button
-            android:id="@+id/Play"
+            android:id="@+id/Complete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="onPlay"
-            android:text="Play" />
-
-        <Button
-            android:id="@+id/LevelSelect"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="onLevelSelect"
-            android:text="Level Select" />
+            android:onClick="onComplete"
+            android:text="Complete" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.75"
             android:orientation="vertical"></LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
