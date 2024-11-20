@@ -1,0 +1,3 @@
+[submodule "MiniSprite"]
+	path = app/src/main/java/MiniSprite
+	url = https://github.com/RoboZero/MiniSprite.git
