@@ -1,51 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="#F0F0F0">
 
     <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:gravity="center"
+        android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.4"
-            android:orientation="vertical"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Outside The Box"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp"/>
 
         <Button
-            android:id="@+id/Play"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Play"
             android:onClick="onPlay"
-            android:text="Play" />
+            android:layout_marginBottom="16dp"/>
 
         <Button
-            android:id="@+id/LevelSelect"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Level Select"
             android:onClick="onLevelSelect"
-            android:text="Level Select" />
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Add the Reset Progress button -->
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Reset Progress"
+            android:onClick="onResetProgress"
+            android:layout_marginBottom="32dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"></LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- First row of level icons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/level0_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+
+                <ImageView
+                    android:id="@+id/level1_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+
+                <ImageView
+                    android:id="@+id/level2_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+
+                <ImageView
+                    android:id="@+id/level3_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+
+                <ImageView
+                    android:id="@+id/level4_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+            </LinearLayout>
+
+            <!-- Second row of level icons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/level5_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+
+                <ImageView
+                    android:id="@+id/level6_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+
+                <ImageView
+                    android:id="@+id/level7_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+
+                <ImageView
+                    android:id="@+id/level8_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+
+                <ImageView
+                    android:id="@+id/level9_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/level_icon"
+                    android:layout_margin="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

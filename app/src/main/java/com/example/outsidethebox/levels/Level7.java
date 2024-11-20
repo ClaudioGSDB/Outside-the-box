@@ -1,4 +1,4 @@
-// Level0.java
+// Level1.java
 package com.example.outsidethebox.levels;
 
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.outsidethebox.GlobalVariables;
 import com.example.outsidethebox.R;
 
-public class Level0 extends AppCompatActivity {
+public class Level7 extends AppCompatActivity {
     private int levelNum;
     private GlobalVariables globalVariables;
 
@@ -60,4 +60,3 @@ public class Level0 extends AppCompatActivity {
         finish();
     }
 }
-

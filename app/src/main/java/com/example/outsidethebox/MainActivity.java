@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +15,8 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    public static boolean[] levels;
+    private boolean[] levels;
+    private GlobalVariables globalVariables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,38 +29,95 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // load levels
-        GlobalVariables.LoadData(this);
-        levels = GlobalVariables.levels;
-        Log.d("DataStorageService","Levels = "+ Arrays.toString(levels));
+        // Initialize GlobalVariables
+        globalVariables = GlobalVariables.getInstance();
+
+        // Load level data
+        globalVariables.loadData(this);
+        levels = globalVariables.getLevels();
+
+        Log.d("DataStorageService", "Levels = " + Arrays.toString(levels));
+
+        // Update level icons based on completion
+        updateLevelIcons();
     }
 
-    public void onPlay(View view) throws ClassNotFoundException {
-        // find first level that's not complete
-        int recent = 0;
-        for(; recent < levels.length; recent++){
-            if(!levels[recent]){
-                break;
+    private void updateLevelIcons() {
+        // Update icons for all 10 levels
+        for (int i = 0; i < 10; i++) {
+            int resId = getResources().getIdentifier("level" + i + "_icon", "id", getPackageName());
+            if (resId != 0) {
+                ImageView levelIcon = findViewById(resId);
+                if (levelIcon != null) {
+                    // Change the icon opacity or add a completed overlay if the level is complete
+                    levelIcon.setAlpha(levels[i] ? 0.5f : 1.0f);
+                }
             }
         }
-
-        // determine which activity to start based on: "Level" + recent
-        Class<?> className = Class.forName("com.example.outsidethebox.levels.Level" + recent);
-        Intent myIntent = new Intent(this, className);
-
-        this.startActivity(myIntent);
     }
 
-    public void onLevelSelect(View view){
+    public void onPlay(View view) {
+        try {
+            // Find first level that's not complete
+            int recent = 0;
+            for (; recent < levels.length; recent++) {
+                if (!levels[recent]) {
+                    break;
+                }
+            }
+
+            // Ensure we don't go out of bounds
+            if (recent >= levels.length) {
+                // All levels completed
+                return;
+            }
+
+            // Dynamically load level class
+            Class<?> levelClass = Class.forName("com.example.outsidethebox.levels.Level" + recent);
+            Intent levelIntent = new Intent(this, levelClass);
+            startActivity(levelIntent);
+
+        } catch (ClassNotFoundException e) {
+            Log.e("MainActivity", "Level class not found", e);
+            // Optionally show a toast or dialog to the user
+        }
+    }
+
+    public void onLevelSelect(View view) {
         Intent myIntent = new Intent(this, LevelSelectActivity.class);
         this.startActivity(myIntent);
     }
 
     @Override
-    protected void onPause(){
-
-        GlobalVariables.SaveData(this);
-
+    protected void onPause() {
+        // Save data when the activity is paused
+        globalVariables.saveData(this);
         super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        // Reload level data and update icons when returning to the main activity
+        globalVariables.loadData(this);
+        levels = globalVariables.getLevels();
+        updateLevelIcons();
+        super.onResume();
+    }
+
+    public void onResetProgress(View view) {
+        // Get the GlobalVariables instance
+        GlobalVariables globalVariables = GlobalVariables.getInstance();
+
+        // Reset all levels to false
+        boolean[] levels = globalVariables.getLevels();
+        for (int i = 0; i < levels.length; i++) {
+            levels[i] = false;
+        }
+
+        // Save the reset data
+        globalVariables.saveData(this);
+
+        // Update the level icons to reflect the reset
+        updateLevelIcons();
     }
 }
