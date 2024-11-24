@@ -37,7 +37,8 @@ public class Level1 extends AppCompatActivity {
             layoutResId = R.layout.activity_level0;
         }
 
-        setContentView(layoutResId);
+        //setContentView(layoutResId);
+        setContentView(R.layout.activity_level1); // Patch because findViewById throws error when looking for glsurfaceview specifically in level 1
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -49,7 +50,7 @@ public class Level1 extends AppCompatActivity {
         globalVariables = GlobalVariables.getInstance();
 
         // From GLSurfaceViewExample sample project
-        GLSurfaceView surfaceView = findViewById(R.id.surfaceView);
+        GLSurfaceView surfaceView = findViewById(R.id.level1SurfaceView);
         surfaceView.setEGLContextClientVersion(3);
         surfaceView.setZOrderOnTop(true);
         surfaceView.setEGLConfigChooser(8,8,8,8,16,0);
