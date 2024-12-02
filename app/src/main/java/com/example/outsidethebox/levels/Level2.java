@@ -71,8 +71,6 @@ public class Level2 extends AppCompatActivity {
             public void run() {
                 if (!levelCompleted) {
                     boolean currentWifiState = isWifiConnected();
-                    Log.d("TEST", "Current: " + currentWifiState);
-                    Log.d("TEST", "Initial: " + initialWifiState);
                     if (currentWifiState != initialWifiState) {
                         levelCompleted = true;
                         completeButton.setVisibility(View.VISIBLE);
