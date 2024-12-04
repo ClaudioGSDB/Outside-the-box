@@ -1,62 +1,88 @@
-// Level1.java
+// Level5.java
 package com.example.outsidethebox.levels;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.outsidethebox.GlobalVariables;
 import com.example.outsidethebox.R;
 
 public class Level5 extends AppCompatActivity {
-    private int levelNum;
+    private int levelNum = 5;
     private GlobalVariables globalVariables;
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private TextView shakeBox;
+    private int shakeCount = 0;
+    private float shakeThreshold = 15.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_level5);
 
-        // Dynamically get the layout resource ID
-        int layoutResId = getResources().getIdentifier("activity_level" + levelNum, "layout", getPackageName());
+        globalVariables = GlobalVariables.getInstance();
+        shakeBox = findViewById(R.id.shakeBox);
 
-        // Fallback to activity_level0 if specific layout doesn't exist
-        if (layoutResId == 0) {
-            layoutResId = R.layout.activity_level0;
+        // Initialize Accelerometer
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager != null) {
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }
 
-        setContentView(layoutResId);
+        if (accelerometer == null) {
+            Log.e("Level5", "No accelerometer found");
+        } else {
+            sensorManager.registerListener(accelerometerListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    private final SensorEventListener accelerometerListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                float x = event.values[0];
+                float y = event.values[1];
+                float z = event.values[2];
 
-        // Initialize GlobalVariables
-        globalVariables = GlobalVariables.getInstance();
+                float shakeMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
 
-        // Get current level number
-        try {
-            levelNum = Integer.parseInt(getClass().getSimpleName().replaceAll("\\D", ""));
-        } catch (NumberFormatException e) {
-            levelNum = 0; // Default to 0 for Level0
-            Log.e("LevelActivity", "Could not parse level number", e);
+                if (shakeMagnitude > shakeThreshold) {
+                    shakeCount++;
+                    shakeBox.setTranslationY(shakeBox.getTranslationY() + 50); // Move box down
+
+                    if (shakeCount >= 10) {
+                        shakeBox.setText("Complete!");
+                        onComplete(null);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(accelerometerListener);
         }
     }
 
     public void onComplete(View view) {
-        // Mark level as completed
         globalVariables.setLevelComplete(levelNum);
         globalVariables.saveData(this);
-
-        // Finish the activity
         finish();
     }
 }
