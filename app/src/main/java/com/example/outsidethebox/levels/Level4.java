@@ -23,7 +23,7 @@ public class Level4 extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private TextView visualBox;
-    private float lightThreshold = 200.0f;
+    private float lightThreshold = 40000.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
