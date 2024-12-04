@@ -1,62 +1,75 @@
-// Level1.java
 package com.example.outsidethebox.levels;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.outsidethebox.GlobalVariables;
 import com.example.outsidethebox.R;
+import com.example.outsidethebox.levels.util.DrawingView;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 public class Level3 extends AppCompatActivity {
-    private int levelNum;
+    private final int levelNum = 3;
     private GlobalVariables globalVariables;
+    private DrawingView drawingView;
+    private Button completeButton;
+    private TextRecognizer recognizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_level3);
 
-        // Dynamically get the layout resource ID
-        int layoutResId = getResources().getIdentifier("activity_level" + levelNum, "layout", getPackageName());
+        globalVariables = GlobalVariables.getInstance();
+        drawingView = findViewById(R.id.drawingView);
+        completeButton = findViewById(R.id.completeButton);
 
-        // Fallback to activity_level0 if specific layout doesn't exist
-        if (layoutResId == 0) {
-            layoutResId = R.layout.activity_level0;
-        }
+        recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
-        setContentView(layoutResId);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        Button clearButton = findViewById(R.id.clearButton);
+        clearButton.setOnClickListener(v -> {
+            drawingView.clear();
+            completeButton.setVisibility(View.GONE);
         });
 
-        // Initialize GlobalVariables
-        globalVariables = GlobalVariables.getInstance();
+        drawingView.setOnTouchListener((v, event) -> {
+            v.onTouchEvent(event);
+            checkText();
+            return true;
+        });
+    }
 
-        // Get current level number
-        try {
-            levelNum = Integer.parseInt(getClass().getSimpleName().replaceAll("\\D", ""));
-        } catch (NumberFormatException e) {
-            levelNum = 0; // Default to 0 for Level0
-            Log.e("LevelActivity", "Could not parse level number", e);
-        }
+    private void checkText() {
+        Bitmap bitmap = drawingView.getBitmap();
+        InputImage image = InputImage.fromBitmap(bitmap, 0);
+
+        recognizer.process(image)
+                .addOnSuccessListener(text -> {
+                    String recognizedText = text.getText().toLowerCase().trim();
+                    if (recognizedText.contains("box")) {
+                        completeButton.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
     public void onComplete(View view) {
-        // Mark level as completed
         globalVariables.setLevelComplete(levelNum);
         globalVariables.saveData(this);
-
-        // Finish the activity
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recognizer.close();
     }
 }
