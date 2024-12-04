@@ -1,4 +1,3 @@
-// Level1.java
 package com.example.outsidethebox.levels;
 
 import android.graphics.Bitmap;
