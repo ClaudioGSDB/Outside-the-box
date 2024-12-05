@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#121212"
     android:padding="16dp">
 
     <Space
@@ -16,7 +17,8 @@
         android:text="Outside the"
         android:textSize="24sp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:textColor="#979797"/>
 
     <com.example.outsidethebox.levels.util.DrawingView
         android:id="@+id/drawingView"

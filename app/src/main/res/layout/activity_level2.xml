@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".levels.Level2">
+    tools:context=".levels.Level2"
+    android:background="#121212">
 
     <LinearLayout
         android:layout_width="match_parent"
