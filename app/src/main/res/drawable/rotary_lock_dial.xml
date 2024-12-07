@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="400dp"
+    android:viewportWidth="400"
+    android:viewportHeight="400">
+
+  <!-- Outer circle (lock body) -->
+  <path
+      android:fillColor="#D3D3D3"
+      android:strokeColor="#333333"
+      android:strokeWidth="10"
+      android:pathData="M200,20
+        A180,180 0 1,1 200,380
+        A180,180 0 1,1 200,20 Z" />
+
+  <!-- Inner dial -->
+  <path
+      android:fillColor="#FFFFFF"
+      android:strokeColor="#666666"
+      android:strokeWidth="5"
+      android:pathData="M200,50
+        A150,150 0 1,1 200,350
+        A150,150 0 1,1 200,50 Z" />
+
+  <!-- Dial markings -->
+  <group
+      android:strokeColor="#333333"
+      android:strokeWidth="3">
+    <path android:pathData="M200,50 L200,70" android:rotation="0" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="30" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="60" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="90" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="120" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="150" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="180" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="210" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="240" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="270" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="300" android:pivotX="200" android:pivotY="200"/>
+    <path android:pathData="M200,50 L200,70" android:rotation="330" android:pivotX="200" android:pivotY="200"/>
+  </group>
+
+  <!-- Pointer/Indicator -->
+  <path
+      android:fillColor="#FF0000"
+      android:pathData="M200,80 L180,200 L220,200 Z" />
+</vector>

@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
-    >
+    android:background="#121212">
 
     <LinearLayout
         android:id="@+id/main"
@@ -22,27 +21,116 @@
             android:layout_marginBottom="32dp"
             android:textColor="#979797"/>
 
-        <Button
+        <!-- Play Button -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Play"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
             android:onClick="onPlay"
-            android:layout_marginBottom="16dp"/>
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="4dp"
+            app:rippleColor="#4CAF50">
 
-        <Button
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_play"
+                    app:tint="#4CAF50"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PLAY"
+                    android:textColor="#4CAF50"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Level Select Button -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Level Select"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
             android:onClick="onLevelSelect"
-            android:layout_marginBottom="16dp"/>
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="4dp"
+            app:rippleColor="#FF9800">
 
-        <!-- Add the Reset Progress button -->
-        <Button
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_grid"
+                    app:tint="#FF9800"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LEVEL SELECT"
+                    android:textColor="#FF9800"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Reset Progress Button -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Reset Progress"
+            android:layout_marginBottom="32dp"
+            android:clickable="true"
+            android:focusable="true"
             android:onClick="onResetProgress"
-            android:layout_marginBottom="32dp"/>
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="4dp"
+            app:rippleColor="#FF5252">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_refresh"
+                    app:tint="#FF5252"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RESET PROGRESS"
+                    android:textColor="#FF5252"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="match_parent"
