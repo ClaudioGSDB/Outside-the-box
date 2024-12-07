@@ -49,9 +49,9 @@ public class Level1Renderer extends ThirdEyeRenderer {
         cubeGreenTexture = new Texture(getContext(), "box_green.png");
 
         for(int i = 0; i < cubeTargetCount; i++){
-            float xDegrees = (float)Math.random() * 40;
-            float yDegrees = 0;//(float)Math.random() * 30;
-            float zDegrees = 0;//(float)Math.random() * 30;
+            float xDegrees = (float)Math.random() * 360;
+            float yDegrees = (float)Math.random() * 360;
+            float zDegrees = (float)Math.random() * 360;
 
             Cube cube = new Cube();
             cube.setTexture(cubeTexture);
