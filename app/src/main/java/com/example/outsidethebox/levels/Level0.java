@@ -1,11 +1,18 @@
 // Level0.java
 package com.example.outsidethebox.levels;
 
+import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +30,7 @@ import MiniSprite.MiniSpriteSurface;
 import MiniSprite.Transform2D;
 import MiniSprite.IMiniSpriteSurfaceListener;
 
-public class Level0 extends AppCompatActivity implements IMiniSpriteSurfaceListener {
+public class Level0 extends AppCompatActivity implements SensorEventListener, IMiniSpriteSurfaceListener {
     private int levelNum;
     private GlobalVariables globalVariables;
 
@@ -32,6 +39,17 @@ public class Level0 extends AppCompatActivity implements IMiniSpriteSurfaceListe
     private final double TAU = Math.PI * 2;
 
     private ArrayList<Transform2D> petals = new ArrayList<>();
+
+    private float[] gyroscopeXYZ = new float[3];
+
+    private float rotationSpeed = 0;
+    private float rotationSpeedDecay = 1f;
+    private float maxRotationSpeed = 60;
+    private float thresholdGyroscopeSpeed = 0.5f;
+    private float completionGyroscopeSpeed = 7;
+    private boolean completed;
+
+    private Button completeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +72,18 @@ public class Level0 extends AppCompatActivity implements IMiniSpriteSurfaceListe
             return insets;
         });
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        completeButton = findViewById(R.id.completeButton);
+        completeButton.setVisibility(View.GONE);
+
         // Initialize GlobalVariables
         globalVariables = GlobalVariables.getInstance();
 
+        SensorManager manager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        Sensor accelerometer = manager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        if(accelerometer != null){
+            manager.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_DELAY_UI);
+        }
 
         SurfaceView mySurface = findViewById(R.id.surfaceView);
         miniSpriteSurface = new MiniSpriteSurface(mySurface);
@@ -69,15 +96,6 @@ public class Level0 extends AppCompatActivity implements IMiniSpriteSurfaceListe
             levelNum = 0; // Default to 0 for Level0
             Log.e("LevelActivity", "Could not parse level number", e);
         }
-    }
-
-    public void onComplete(View view) {
-        // Mark level as completed
-        globalVariables.setLevelComplete(levelNum);
-        globalVariables.saveData(this);
-
-        // Finish the activity
-        finish();
     }
 
     @Override
@@ -96,7 +114,7 @@ public class Level0 extends AppCompatActivity implements IMiniSpriteSurfaceListe
         for(int i = 0; i < petalCount; i++){
             double angleRads = (TAU / petalCount) * i;
             double angleDegrees = Math.toDegrees(angleRads);
-            Transform2D petal = new MiniSprite.Builder(R.drawable.level0_petal, getResources())
+            Transform2D petal = new MiniSprite.Builder(R.drawable.petal, getResources())
                     .withName("Petal")
                     .withDimensions(width, height)
                     .withPositionXY(centerX, centerY)
@@ -108,6 +126,14 @@ public class Level0 extends AppCompatActivity implements IMiniSpriteSurfaceListe
             miniSpriteSurface.AllTransforms.instantiateTransform(petal, 1);
         }
 
+        int boxSide = (int)(canvas.getWidth() / 4);
+        Transform2D box = new MiniSprite.Builder(R.drawable.box, getResources())
+                .withName("Box")
+                .withPositionXY(centerX, centerY)
+                .withDimensions(boxSide, boxSide)
+                .build();
+        miniSpriteSurface.AllTransforms.instantiateTransform(box, 2);
+
         started = true;
     }
 
@@ -118,11 +144,48 @@ public class Level0 extends AppCompatActivity implements IMiniSpriteSurfaceListe
 
     @Override
     public void onPostDrawSprites(MiniSpriteSurface miniSpriteSurface, Canvas canvas) {
-        float rotationSpeed = 20;
-
         for (Transform2D petal : petals) {
             petal.RotationAngleDegrees += rotationSpeed;
         }
+
+        if(rotationSpeed > rotationSpeedDecay){
+            rotationSpeed -= rotationSpeedDecay;
+        } else if(rotationSpeed < rotationSpeedDecay) {
+            rotationSpeed += rotationSpeedDecay;
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if(completed) return;
+
+        gyroscopeXYZ[0] = sensorEvent.values[0];
+        gyroscopeXYZ[1] = sensorEvent.values[1];
+        gyroscopeXYZ[2] = sensorEvent.values[2];
+
+        if(Math.abs(gyroscopeXYZ[2]) > thresholdGyroscopeSpeed){
+            rotationSpeed = -(gyroscopeXYZ[2]/completionGyroscopeSpeed) * maxRotationSpeed;
+        }
+
+        if(Math.abs(gyroscopeXYZ[2]) >= completionGyroscopeSpeed){
+            completeButton.setVisibility(View.VISIBLE);
+            rotationSpeedDecay = 0;
+            completed = true;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    public void onComplete(View view) {
+        // Mark level as completed
+        globalVariables.setLevelComplete(levelNum);
+        globalVariables.saveData(this);
+
+        // Finish the activity
+        finish();
     }
 }
 
