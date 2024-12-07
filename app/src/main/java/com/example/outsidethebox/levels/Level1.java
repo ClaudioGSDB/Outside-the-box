@@ -3,6 +3,7 @@ package com.example.outsidethebox.levels;
 
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -17,10 +18,12 @@ import com.example.outsidethebox.R;
 import com.example.outsidethebox.level1resources.Level1Renderer;
 
 import android.opengl.GLSurfaceView;
+import android.widget.Button;
 
 public class Level1 extends AppCompatActivity {
     private int levelNum;
     private GlobalVariables globalVariables;
+    private Button completeButton;
 
     private Level1Renderer my_renderer;
 
@@ -56,7 +59,13 @@ public class Level1 extends AppCompatActivity {
         surfaceView.setEGLConfigChooser(8,8,8,8,16,0);
         surfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
 
-        my_renderer = new Level1Renderer(this);
+        completeButton = findViewById(R.id.completeButton);
+        completeButton.setVisibility(View.GONE);
+
+        Handler handler = new Handler();
+        my_renderer = new Level1Renderer(this, handler, () -> {
+            completeButton.setVisibility(View.VISIBLE);
+        });
 
         surfaceView.setRenderer(my_renderer);
 

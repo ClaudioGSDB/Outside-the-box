@@ -31,6 +31,8 @@ import androidx.core.app.ActivityCompat;
 
 import java.util.Arrays;
 
+import gl.Transform;
+
 public abstract class ThirdEyeRenderer extends GLRenderer implements SensorEventListener {
 
     private static final int REQUEST_CAMERA_PERMISSION = 200;
@@ -306,5 +308,12 @@ public abstract class ThirdEyeRenderer extends GLRenderer implements SensorEvent
         textureView=(TextureView)view;
         textureView.setSurfaceTextureListener(textureListener);
 
+    }
+
+
+    Transform rotationTransform = new Transform();
+    public Transform getRotationTransform(){
+        rotationTransform.matrix = currentRotation;
+        return rotationTransform;
     }
 }

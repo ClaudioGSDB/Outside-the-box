@@ -72,6 +72,10 @@ public class Transform {
         return this;
     }
 
+    public Transform reset(){
+        return identity();
+    }
+
     public Transform multiply(float[] mat){
         float[] copy=new float[16];
         System.arraycopy(matrix,0,copy,0,16);
