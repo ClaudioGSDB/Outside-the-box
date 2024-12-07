@@ -85,7 +85,7 @@ public class Level7 extends AppCompatActivity implements SensorEventListener {
         // Check for downward acceleration
         float zAcceleration = event.values[1]; // Y-axis for downward motion
 
-        if (!isDropDetected && zAcceleration < DROP_THRESHOLD || true) {
+        if (!isDropDetected && zAcceleration < DROP_THRESHOLD) {
             // Drop detected
             isDropDetected = true;
 
