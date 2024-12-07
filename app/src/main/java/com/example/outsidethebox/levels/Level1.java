@@ -1,6 +1,7 @@
 // Level1.java
 package com.example.outsidethebox.levels;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,7 @@ public class Level1 extends AppCompatActivity {
 
         //setContentView(layoutResId);
         setContentView(R.layout.activity_level1); // Patch because findViewById throws error when looking for glsurfaceview specifically in level 1
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

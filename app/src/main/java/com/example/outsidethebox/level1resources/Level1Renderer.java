@@ -17,23 +17,16 @@ public class Level1Renderer extends ThirdEyeRenderer {
     Texture cubeGreenTexture;
     ArrayList<Cube> cubes;
     HashSet<Cube> foundCubes;
+    Cube rotationMatrixCube;
 
     int cubeTargetCount = 3;
     float cubeDistance = 20;
 
-    Texture pyramid_texture;
-    Pyramid my_pyramid;
-
-    Transform cameraRotation;
     float lookDotError = 0.1f;
 
     Handler handler;
     Runnable onComplete;
     boolean completed;
-
-    public boolean isCompleted(){
-        return completed;
-    }
 
     public Level1Renderer(Activity activity, Handler handler, Runnable onComplete){
         super(activity);
@@ -55,20 +48,19 @@ public class Level1Renderer extends ThirdEyeRenderer {
 
             Cube cube = new Cube();
             cube.setTexture(cubeTexture);
+            cube.localTransform.reset();
             cube.localTransform.rotateX(xDegrees);
             cube.localTransform.rotateY(yDegrees);
             cube.localTransform.rotateZ(zDegrees);
-            cube.localTransform.translate(0, 0, -cubeDistance);
+            cube.localTransform.translate(0, 0, cubeDistance);
 
             cubes.add(cube);
         }
 
-        pyramid_texture = new Texture(getContext(),"pyramid_texture.png");
-        my_pyramid = new Pyramid();
-        my_pyramid.setTexture(pyramid_texture);
-        my_pyramid.localTransform.translate(0,0, -10);
-
-        cameraRotation = getRotationTransform();
+        rotationMatrixCube = new Cube();
+        rotationMatrixCube.setTexture(cubeTexture);
+        rotationMatrixCube.localTransform.translate(0,0, -10);
+        rotationMatrixCube.localTransform.updateShader();
 
         setLightDir(0,-1,-1);
     }
@@ -79,17 +71,14 @@ public class Level1Renderer extends ThirdEyeRenderer {
         float perSec = (float)(elapsedDisplayTime-lastTime);
         lastTime = elapsedDisplayTime;
 
-        my_pyramid.localTransform.rotateX(1*perSec);
-        my_pyramid.localTransform.rotateZ(1*perSec);
-        my_pyramid.localTransform.rotateY(20*perSec);
-        my_pyramid.localTransform.updateShader();
+        updateRotationTransform(rotationMatrixCube.localTransform);
 
         for (int i = cubes.size() - 1; i >= 0; i--){
             Cube cube = cubes.get(i);
 
-            float dot = transformForwardDot(cameraRotation, cube.localTransform);
+            float dot = transformForwardDot(rotationMatrixCube.localTransform, cube.localTransform);
             Log.d("Cube" + i, "Cube in range: " + dot);
-            if(dot > 1 - lookDotError){
+            if(dot < lookDotError - 1){
                 cube.setTexture(cubeGreenTexture);
                 foundCubes.add(cube);
                 Log.d("Cube" + i, "FOUND CUBE " + i);
@@ -108,17 +97,17 @@ public class Level1Renderer extends ThirdEyeRenderer {
     }
 
     public float transformForwardDot(Transform a, Transform b){
-        return a.matrix[8] * -b.matrix[8] + a.matrix[9] * -b.matrix[9] + a.matrix[10] * -b.matrix[10];
+        return a.matrix[8] *  b.matrix[8] + a.matrix[9] * b.matrix[9] + a.matrix[10] * b.matrix[10];
     }
 
     @Override
     public void draw() {
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT| GLES30.GL_DEPTH_BUFFER_BIT);
 
-        for (int i = 0; i < cubes.size(); i++){
-            cubes.get(i).draw();
-        }
+//        for (int i = 0; i < cubes.size(); i++){
+//            cubes.get(i).draw();
+//        }
 
-        //my_pyramid.draw();
+        rotationMatrixCube.draw();
     }
 }

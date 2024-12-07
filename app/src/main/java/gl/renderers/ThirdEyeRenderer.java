@@ -18,6 +18,7 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.opengl.Matrix;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Size;
@@ -271,7 +272,6 @@ public abstract class ThirdEyeRenderer extends GLRenderer implements SensorEvent
         // Rotation matrix based on current readings from accelerometer and magnetometer.
         SensorManager.getRotationMatrix(currentRotation, null, accelerometerReading, magnetometerReading);
         Matrix.rotateM(currentRotation,0,0f,0f,1f,0f);
-
     }
 
     @Override
@@ -307,13 +307,12 @@ public abstract class ThirdEyeRenderer extends GLRenderer implements SensorEvent
     {
         textureView=(TextureView)view;
         textureView.setSurfaceTextureListener(textureListener);
-
     }
 
 
-    Transform rotationTransform = new Transform();
-    public Transform getRotationTransform(){
-        rotationTransform.matrix = currentRotation;
-        return rotationTransform;
+    public void updateRotationTransform(Transform transform){
+        for(int i = 0; i < 16; i++){
+            transform.matrix[i] = currentRotation[i];
+        }
     }
 }
